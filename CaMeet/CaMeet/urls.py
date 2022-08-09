@@ -15,10 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('user/', include('dj_rest_auth.urls')),
+    path('user/', include('dj_rest_auth.registration.urls'))
+    path('user/', include('allauth.urls')),
+    path('user/', include('accounts.urls')),
     path('cameet1/', include("CaMeetApp.urls1")),#1:지훈
     path('cameet2/', include("CaMeetApp.urls2")),#2:상민
     path('cameet3/', include("CaMeetApp.urls3")),#3:현우
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
