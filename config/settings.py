@@ -3,7 +3,9 @@ from pathlib import Path
 import os, json
 from django.core.exceptions import ImproperlyConfigured
 from datetime import timedelta
+from dotenv import load_dotenv
 
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -44,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #App
-    'user',
+    'accounts',
     'room',
     #site설정
     'django.contrib.sites',
@@ -61,14 +63,17 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.kakao',
     #cors
     'corsheaders',
     
     
 ]
+
+
 SITE_ID = 1
 
-AUTH_USER_MODEL = 'user.User'
+AUTH_USER_MODEL = 'accounts.User'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -184,7 +189,12 @@ SIMPLE_JWT = {
 
 SOCIAL_AUTH_GOOGLE_CLIENT_ID = os.environ.get("SOCIAL_AUTH_GOOGLE_CLIENT_ID")
 SOCIAL_AUTH_GOOGLE_SECRET = os.environ.get("SOCIAL_AUTH_GOOGLE_SECRET")
-
+KAKAO_REST_API_KEY = os.environ.get("KAKAO_REST_API_KEY")
+KAKAO_CLIENT_SECRET_KEY = os.environ.get("KAKAO_CLIENT_SECRET_KEY")
+STATE = os.environ.get("STATE")
 
 #CORS configuration
 CORS_ORIGIN_ALLOW_ALL= True
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
