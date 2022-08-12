@@ -21,6 +21,85 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework import permissions
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.core.mail import EmailMessage
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http              import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding          import force_bytes, smart_str
+from .tokens     import account_activation_token
+from .utils      import active_message
+from django.core.exceptions         import ValidationError
+
+
+
+
+#[Mypage] 학교이메일 인증
+class MypageSchoolMailAuth(APIView):
+    def post(self,request):
+        try:
+            #body =  json.loads(request.body.decode('utf-8', "ignore"))
+            print("1")
+            user=User.objects.get(id=request.user.id)
+            print("2")
+            user_id=request.user.id
+            print("3")
+            #email=body.get('user_auth_email')
+            print("3-1")
+            email=user.user_auth_email
+            print(email)
+            print("4")
+            current_site=get_current_site(request)
+            print("5")
+            domain=current_site
+            print("6")
+
+            # user_id 를 url_base64 로 encode 해준다
+            uidb64       = user_id
+            print("7")
+            # tokens.py 에서 만들었던 token 생성기로 token 생성
+            token        = account_activation_token.make_token(user)
+            print("8")
+            # utils.py 에서 만들었던 message 를 불러온다
+            message_data = active_message(domain, uidb64, token)
+            print("9")
+
+            mail_title = "이메일 인증을 완료해주세요"
+            mail_to    = email
+            print("10")
+            email      = EmailMessage(mail_title, message_data, to=[mail_to])
+            print("11")
+            email.send()
+            print("12")
+
+            return JsonResponse({"message" : "SUCCESS"}, status=200)
+        except KeyError:
+            return JsonResponse({"error"   : "KEY_ERROR"}, status=400)
+
+        except TypeError:
+            return JsonResponse({"error"   : "TYPE_ERROR"}, status=400)
+
+        except ValidationError:
+            return JsonResponse({"error"   : "VALIDATION_ERROR"}, status=400)
+
+        except User.DoesNotExist:
+            return JsonResponse({"error"   : "NON_EXIST_USER"}, status=400)
+
+class ActivateView(APIView):
+    def get(self, request, uidb64, token):
+        try:
+            uid =uidb64
+            print("1")
+            user = User.objects.get(pk=uid)
+            print("2")
+            if account_activation_token.check_token(user, token):
+                print("3")
+                User.objects.filter(pk=uid).update(user_status=1)
+                print("4")
+                return redirect("http://127.0.0.1:8000/accounts/mypage")
+            return JsonResponse({"error": "AUTH_FAIL"}, status=400)
+        except ValidationError:
+            return JsonResponse({"error": "TYPE_ERROR"}, status=400)
+        except KeyError:
+            return JsonResponse({"error": "KEY_ERROR"}, status=400)
 
 
 #[Mypage] 회원정보 조회,수정

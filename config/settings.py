@@ -4,6 +4,8 @@ import os, json
 from django.core.exceptions import ImproperlyConfigured
 from datetime import timedelta
 from dotenv import load_dotenv
+import my_settings 
+
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -46,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #App
+    'six',
     'accounts',
     'room',
     #site설정
@@ -198,3 +201,11 @@ CORS_ORIGIN_ALLOW_ALL= True
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+EMAIL_BACKEND       = my_settings.EMAIL['EMAIL_BACKEND']
+EMAIL_USE_TLS       = my_settings.EMAIL['EMAIL_USE_TLS']      
+EMAIL_PORT          = my_settings.EMAIL['EMAIL_PORT']                
+EMAIL_HOST          = my_settings.EMAIL['EMAIL_HOST']
+EMAIL_HOST_USER     = my_settings.EMAIL['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = my_settings.EMAIL['EMAIL_HOST_PASSWORD']
+SERVER_EMAIL        = my_settings.EMAIL['SERVER_EMAIL']
