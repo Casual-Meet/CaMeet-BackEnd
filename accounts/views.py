@@ -12,12 +12,60 @@ from allauth.socialaccount.providers.kakao import views as kakao_view
 from allauth.socialaccount.providers.github import views as github_view
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from allauth.socialaccount.models import SocialAccount
+from rest_framework.generics import get_object_or_404
+from accounts.serializers import UserSerializer
 from .models import User
 import json
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from rest_framework import permissions
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
+
+#[Mypage] 회원정보 조회,수정
+class MypageUserDetailAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+		
+    # JWT 인증방식 클래스 지정하기
+    authentication_classes = [JWTAuthentication]    
+    
+    def get(self,request):
+        user=User.objects.get(id=request.user.id)
+        serializer=UserSerializer(user)
+        return Response(serializer.data)
+    
+    def put(self,request):
+        user=User.objects.get(id=request.user.id)
+        serializer=UserSerializer(user,data=request.data,partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#[Info] 회원정보 조회 
+class InfoUserDetailAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+		
+    # JWT 인증방식 클래스 지정하기
+    authentication_classes = [JWTAuthentication]    
+    
+    def get(self,request):
+        user=User.objects.get(id=request.user.id)
+        serializer=UserSerializer(user)
+        return Response(serializer.data)
+
+
+#회원이미지 수정(mypage)
+
+
+
+
+
+
+
+
+#Social Login View
 BASE_URL = 'http://127.0.0.1:8000/'
 GOOGLE_CALLBACK_URI = BASE_URL + 'accounts/google/callback/'
 KAKAO_CALLBACK_URI = BASE_URL + 'accounts/kakao/callback/'
