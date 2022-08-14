@@ -102,3 +102,15 @@ class ApplySerializer(serializers.ModelSerializer):
     class Meta:
         model = Apply
         fields = '__all__'
+
+class RoomcreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Room
+        fields = '__all__'
+
+class RoomApplySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Apply
+        fields = '__all__'
