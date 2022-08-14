@@ -1,4 +1,5 @@
 
+from time import time
 from django.shortcuts import render, get_object_or_404
 from .serializers import *
 from rest_framework.views import APIView
@@ -7,6 +8,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
 from rest_framework.renderers import JSONRenderer
+
+from datetime import date, timedelta
 
 
 class UserList(APIView):
@@ -32,11 +35,30 @@ class UserList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED) 
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
+class UserInfo(APIView):
+
+    def get(self, request):
+
+        user = request.user
+        serializer = UserSerializer(user)
+    
+        return Response(serializer.data)
+
+
 class RoomList(APIView):
 
     def get(self, request):
-        
+
         room = Room.objects.all()
+        serializer = RoomSerializer(room, many=True)
+        return Response(serializer.data)
+
+# 일주일치 room정부 불러옴
+class AWeekRoomList(APIView):
+
+    def get(self, request):
+
+        room = Room.objects.filter(room_date__range=[date.today(), date.today()+timedelta(days=7)]).all()
         serializer = RoomSerializer(room, many=True)
         return Response(serializer.data)
 
