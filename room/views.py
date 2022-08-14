@@ -53,3 +53,24 @@ class RoomDetailAPIView(APIView):
         serializer = RoomSerializer(room)
         print(serializer)
         return Response(serializer.data)
+
+    def post(self, request, pk):
+        request.data['user_id'] = request.user.id
+        request.data['room_id'] = pk
+
+        serializer = RoomApplySerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+
+
+
+class RoomCreateAPIView(APIView):
+    
+    def post(self, request):
+        id=request.user.id
+        request.data['user_key']=id
+        serializer = RoomcreateSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
