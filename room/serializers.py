@@ -110,7 +110,7 @@ class RoomcreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class RoomApplySerializer(serializers.ModelSerializer):
-
+    
     class Meta:
         model = Apply
         fields = '__all__'

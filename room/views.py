@@ -57,10 +57,16 @@ class RoomDetailAPIView(APIView):
     def post(self, request, pk):
         request.data['user_id'] = request.user.id
         request.data['room_id'] = pk
-
+        apply_counter = Apply.objects.filter(room_id_id = pk)
         serializer = RoomApplySerializer(data = request.data)
+        roomHeadcount = Room.objects.get(id = pk).room_headcount
         if serializer.is_valid():
             serializer.save()
+        
+        if len(apply_counter) == roomHeadcount:
+            room = Room.objects.get(id = pk)
+            room.room_status = 2
+            room.save()
         return Response(serializer.data)
 
 
