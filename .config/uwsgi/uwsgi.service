@@ -3,7 +3,7 @@ Description=uWSGI service
 After=syslog.target
  
 [Service]
-ExecStart=/home/ubuntu/myvenv/bin/uwsgi -i /srv/CaMeet-BackEnd/.config/uwsgi/mysite.ini
+ExecStart=/home/ubuntu/myvenv/bin/uwsgi -i /srv/CaMeet-BackEnd/.config/uwsgi/config.ini
  
 Restart=always
 KillSignal=SIGQUIT
