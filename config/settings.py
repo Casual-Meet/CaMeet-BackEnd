@@ -71,8 +71,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.kakao',
     #cors
     'corsheaders',
-    
-    
 ]
 
 
