@@ -94,7 +94,7 @@ class ActivateView(APIView):
                 print("3")
                 User.objects.filter(pk=uid).update(user_status=1)
                 print("4")
-                return redirect("http://127.0.0.1:8000/accounts/mypage")
+                return redirect("http://cameet.site//accounts/mypage")
             return JsonResponse({"error": "AUTH_FAIL"}, status=400)
         except ValidationError:
             return JsonResponse({"error": "TYPE_ERROR"}, status=400)
@@ -145,7 +145,7 @@ class InfoUserDetailAPIView(APIView):
 
 
 #Social Login View
-BASE_URL = 'http://127.0.0.1:8000/'
+BASE_URL = 'http://cameet.site/'
 GOOGLE_CALLBACK_URI = BASE_URL + 'accounts/google/callback/'
 KAKAO_CALLBACK_URI = BASE_URL + 'accounts/kakao/callback/'
 
