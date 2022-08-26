@@ -38,6 +38,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
                  '.ap-northeast-2.compute.amazonaws.com',
                  '.cameet.site',
+                 '52.78.28.112',
                  ]
 
 
