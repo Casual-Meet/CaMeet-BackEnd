@@ -28,7 +28,7 @@ from django.utils.encoding          import force_bytes, smart_str
 from .tokens     import account_activation_token
 from .utils      import active_message
 from django.core.exceptions         import ValidationError
-from rest_framework.response import Response
+
 
 
 
@@ -203,6 +203,7 @@ def google_callback(request):
         data = {'access_token': access_token, 'code': code}
         accept = requests.post(
             f"{BASE_URL}accounts/google/login/finish/", data=data)
+        print("post하고 왔음")
         accept_status = accept.status_code
         if accept_status != 200:
             return JsonResponse({'err_msg': 'failed to signin'}, status=accept_status)
@@ -215,6 +216,7 @@ def google_callback(request):
         data = {'access_token': access_token, 'code': code}
         accept = requests.post(
             f"{BASE_URL}accounts/google/login/finish/", data=data)
+        print("post하고왔음")
         accept_status = accept.status_code
         if accept_status != 200:
             return JsonResponse({'err_msg': 'failed to signup'}, status=accept_status)
