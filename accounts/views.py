@@ -218,10 +218,12 @@ def google_callback(request):
             f"{BASE_URL}accounts/google/login/finish/", data=data)
         print("post하고왔음")
         accept_status = accept.status_code
+        print(accept)
         if accept_status != 200:
             return JsonResponse({'err_msg': 'failed to signup'}, status=accept_status)
         accept_json = accept.json()
         accept_json.pop('user', None)
+        print("여기까지옴")
         return JsonResponse(accept_json,status.HTTP_200_OK)
 
 
