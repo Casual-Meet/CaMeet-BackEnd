@@ -28,7 +28,7 @@ from django.utils.encoding          import force_bytes, smart_str
 from .tokens     import account_activation_token
 from .utils      import active_message
 from django.core.exceptions         import ValidationError
-
+from rest_framework.response import Response
 
 
 
@@ -208,7 +208,7 @@ def google_callback(request):
             return JsonResponse({'err_msg': 'failed to signin'}, status=accept_status)
         accept_json = accept.json()
         accept_json.pop('user', None)
-        return JsonResponse(accept_json)
+        return JsonResponse(accept_json,status.HTTP_202_ACCEPTED)
     except User.DoesNotExist:
         # 기존에 가입된 유저가 없으면 새로 가입
         print("새로가입한 유저")
@@ -220,7 +220,7 @@ def google_callback(request):
             return JsonResponse({'err_msg': 'failed to signup'}, status=accept_status)
         accept_json = accept.json()
         accept_json.pop('user', None)
-        return JsonResponse(accept_json)
+        return JsonResponse(accept_json,status.HTTP_200_OK)
 
 
 class GoogleLogin(SocialLoginView):
@@ -292,7 +292,7 @@ def kakao_callback(request):
             return JsonResponse({'err_msg': 'failed to signin'}, status=accept_status)
         accept_json = accept.json()
         accept_json.pop('user', None)
-        return JsonResponse(accept_json)
+        return JsonResponse(accept_json,status.HTTP_200_OK)
     except User.DoesNotExist:
         # 기존에 가입된 유저가 없으면 새로 가입
         print("새로가입중임")
@@ -305,7 +305,7 @@ def kakao_callback(request):
         # user의 pk, email, first name, last name과 Access Token, Refresh token 가져옴
         accept_json = accept.json()
         accept_json.pop('user', None)
-        return JsonResponse(accept_json)
+        return JsonResponse(accept_json,status.HTTP_200_OK)
 
 
 class KakaoLogin(SocialLoginView):
