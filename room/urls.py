@@ -15,5 +15,4 @@ urlpatterns = [
     path('roomdetail/<int:pk>', views.RoomDetailAPIView.as_view()),
     # 방생성 post 요청보내는 url
     path('roomcreate/', views.RoomCreateAPIView.as_view())
-
 ]
