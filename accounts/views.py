@@ -209,7 +209,7 @@ def google_callback(request):
             return JsonResponse({'err_msg': 'failed to signin'}, status=accept_status)
         accept_json = accept.json()
         accept_json.pop('user', None)
-        return JsonResponse(accept_json)
+        return Response(accept_json)
     except User.DoesNotExist:
         # 기존에 가입된 유저가 없으면 새로 가입
         print("새로가입한 유저")
@@ -224,7 +224,7 @@ def google_callback(request):
         accept_json = accept.json()
         accept_json.pop('user', None)
         print("여기까지옴")
-        return JsonResponse(accept_json)
+        return Response(accept_json)
 
 
 class GoogleLogin(SocialLoginView):
