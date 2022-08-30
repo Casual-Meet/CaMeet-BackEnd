@@ -259,13 +259,13 @@ def kakao_callback(request):
     profile_request = requests.get(
         "https://kapi.kakao.com/v2/user/me", headers={"Authorization": f"Bearer {access_token}"})
     profile_json = profile_request.json()
-    
+
     """
     kakao_account에서 이메일 외에
     카카오톡 프로필 이미지, 배경 이미지 url 가져올 수 있음
     print(kakao_account) 참고
     """
-    # 사용자가 이메일동의를 안할수도있어서 id값으로 이메일을 만들어서 작업함
+# 사용자가 이메일동의를 안할수도있어서 id값으로 이메일을 만들어서 작업함
     email = profile_json.get("kakao_account", None).get("email")
     if email is None:
         email = str(profile_json.get("id")) + "@kakao.com"
@@ -293,7 +293,7 @@ def kakao_callback(request):
             return JsonResponse({'err_msg': 'failed to signin'}, status=accept_status)
         accept_json = accept.json()
         accept_json.pop('user', None)
-        return JsonResponse(accept_json,status.HTTP_200_OK)
+        return JsonResponse(accept_json)
     except User.DoesNotExist:
         # 기존에 가입된 유저가 없으면 새로 가입
         print("새로가입중임")
@@ -306,7 +306,7 @@ def kakao_callback(request):
         # user의 pk, email, first name, last name과 Access Token, Refresh token 가져옴
         accept_json = accept.json()
         accept_json.pop('user', None)
-        return JsonResponse(accept_json,status.HTTP_200_OK)
+        return JsonResponse(accept_json)
 
 
 class KakaoLogin(SocialLoginView):
