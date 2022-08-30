@@ -182,7 +182,7 @@ def google_callback(request):
         f"https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={access_token}")
     email_req_status = email_req.status_code
     if email_req_status != 200:
-        return JsonResponse({'err_msg': 'failed to get email'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'err_msg': 'failed to get email'}, status=status.HTTP_400_BAD_REQUEST)
     email_req_json = email_req.json()
     email = email_req_json.get('email')
     print(email)
@@ -195,9 +195,9 @@ def google_callback(request):
         # 다른 SNS로 가입된 유저
         social_user = SocialAccount.objects.get(user=user)
         if social_user is None:
-            return JsonResponse({'err_msg': 'email exists but not social user'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'err_msg': 'email exists but not social user'}, status=status.HTTP_400_BAD_REQUEST)
         if social_user.provider != 'google':
-            return JsonResponse({'err_msg': 'no matching social type'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'err_msg': 'no matching social type'}, status=status.HTTP_400_BAD_REQUEST)
         # 기존에 Google로 가입된 유저
         print("기존에 있는 유저")
         data = {'access_token': access_token, 'code': code}
@@ -206,10 +206,10 @@ def google_callback(request):
         print("post하고 왔음")
         accept_status = accept.status_code
         if accept_status != 200:
-            return JsonResponse({'err_msg': 'failed to signin'}, status=accept_status)
+            return Response({'err_msg': 'failed to signin'}, status=accept_status)
         accept_json = accept.json()
         accept_json.pop('user', None)
-        return JsonResponse(accept_json,status.HTTP_200_OK)
+        return Response(accept_json)
     except User.DoesNotExist:
         # 기존에 가입된 유저가 없으면 새로 가입
         print("새로가입한 유저")
@@ -220,11 +220,11 @@ def google_callback(request):
         accept_status = accept.status_code
         print(accept_status)
         if accept_status != 200:
-            return JsonResponse({'err_msg': 'failed to signup'}, status=accept_status)
+            return Response({'err_msg': 'failed to signup'}, status=accept_status)
         accept_json = accept.json()
         accept_json.pop('user', None)
         print("여기까지옴")
-        return JsonResponse(accept_json,status.HTTP_200_OK)
+        return Response(accept_json)
 
 
 class GoogleLogin(SocialLoginView):
