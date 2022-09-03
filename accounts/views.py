@@ -145,7 +145,7 @@ class InfoUserDetailAPIView(APIView):
 
 
 #Social Login View
-BASE_URL = 'http://cameet.site/'
+BASE_URL = 'https://cameet.site/'
 GOOGLE_CALLBACK_URI = BASE_URL + 'accounts/google/callback/'
 KAKAO_CALLBACK_URI = BASE_URL + 'accounts/kakao/callback/'
 
