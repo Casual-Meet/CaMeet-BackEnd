@@ -44,6 +44,8 @@ ALLOWED_HOSTS = [
                  '192.168.2.61',
                  '172.31.36.217',
                  '59.7.77.171',
+                 'casual-meet.github.io/CaMeet-Front/',
+                 '127.0.0.1',
                  ]
 
 
