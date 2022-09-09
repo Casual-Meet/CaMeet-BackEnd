@@ -57,7 +57,7 @@ class RoomList(APIView):
 class AWeekRoomList(APIView):
 
     def get(self, request):
-
+        
         room = Room.objects.filter(room_date__range=[date.today(), date.today()+timedelta(days=7)]).all()
         serializer = RoomSerializer(room, many=True)
         return Response(serializer.data)

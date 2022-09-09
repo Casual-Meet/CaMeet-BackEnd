@@ -10,7 +10,7 @@ urlpatterns = [
     # room정보 전체 리스트업하는 url
     path('roomlist/', views.RoomList.as_view()),
     # 일주일치 room정보 전체 리스트업하는 url
-    path('aweek-roomlist/', views.AWeekRoomList.as_view()),
+    path('', views.AWeekRoomList.as_view()),
     # 특정 room 정보 불러오는 url
     path('roomdetail/<int:pk>', views.RoomDetailAPIView.as_view()),
     # 방생성 post 요청보내는 url

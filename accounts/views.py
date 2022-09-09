@@ -114,7 +114,7 @@ class MypageUserDetailAPIView(APIView):
         serializer=UserSerializer(user)
         return Response(serializer.data)
     
-    def put(self,request):
+    def patch(self,request):
         user=User.objects.get(id=request.user.id)
         serializer=UserSerializer(user,data=request.data,partial=True)
         if serializer.is_valid():
