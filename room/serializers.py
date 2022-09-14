@@ -92,6 +92,7 @@ class RoomSerializer(serializers.ModelSerializer):
         user_json = {
                 #'user_id': obj.user_key.name,
                 'email' : obj.user_key.email,
+                'user_nickname' : obj.user_key.user_nickname,
                 #'user_age' : obj.user_key.created,
             }
         return user_json
