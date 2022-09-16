@@ -82,7 +82,7 @@ class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         # fields = [ 'room_title', 'user']
-        fields = ('id', 'room_title', 'room_interest', 'room_place','room_date','room_time','room_headcount','room_status','room_created_time','host')
+        fields = ('id', 'room_title', 'room_interest', 'room_place','room_date','room_time','room_headcount','room_status','room_created_time','host','room_latitude','room_longitude')
         # fields = ['id', 'user_key', 'room_title', 'room_interest']
         # unique_together = ['user_id', 'room_title']
     

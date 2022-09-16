@@ -14,7 +14,9 @@ class Room(models.Model):
     room_headcount = models.IntegerField(default=1)
     room_status = models.IntegerField(default=0)
     room_created_time = models.DateTimeField(auto_now_add=True)
-
+    room_latitude=models.CharField(max_length=50,null=True)
+    room_longitude=models.CharField(max_length=50,null=True)
+    
     def __str__(self):
         return f"{self.room_title}"
 

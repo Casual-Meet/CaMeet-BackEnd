@@ -162,6 +162,7 @@ def google_login(request):
 
 
 def google_callback(request):
+    state='random'
     client_id = getattr(settings, "SOCIAL_AUTH_GOOGLE_CLIENT_ID")
     client_secret = getattr(settings, "SOCIAL_AUTH_GOOGLE_SECRET")
     code = request.GET.get('code')
@@ -169,7 +170,7 @@ def google_callback(request):
     Access Token Request
     """
     token_req = requests.post(
-        f"https://oauth2.googleapis.com/token?client_id={client_id}&client_secret={client_secret}&code={code}&grant_type=authorization_code&redirect_uri={GOOGLE_CALLBACK_URI}&state={state}")
+        f"https://oauth2.googleapis.com/token?client_id={client_id}&client_secret={client_secret}&code={code}&grant_type=authorization_code&redirect_uri=http://localhost:3000/login&state={state}")
     token_req_json = token_req.json()
     
     access_token = token_req_json.get('access_token')
