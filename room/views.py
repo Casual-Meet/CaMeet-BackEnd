@@ -105,7 +105,7 @@ class RoomDetailAPIView(APIView):
             serializer.save()
 
         
-        if len(apply_counter) == roomHeadcount:
+        if len(apply_counter)+1 == roomHeadcount:
             room = Room.objects.get(id = pk)
             room.room_status = 2
             room.save()
