@@ -77,11 +77,16 @@ class RoomDetailAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request, pk):
+        request.data['user_id'] = request.user.id
+        request.data['room_id'] = pk
         id = request.user.id
         host=User.objects.get(id=id)
         room=Room.objects.get(id=pk)
         apply_counter = Apply.objects.filter(room_id_id = pk)
         
+        #방이 풀방이면? 더 참여를 할 수 없습니다
+        if room.room_status==2:
+            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
         
         #방생성자가 신청을 한다면? 호스트는 참가하기를 누를 수 없습니다.
         if room.user_key==host.email:
@@ -94,9 +99,12 @@ class RoomDetailAPIView(APIView):
         
         serializer = RoomApplySerializer(data = request.data)
         roomHeadcount = Room.objects.get(id = pk).room_headcount
+        
+        #Apply 컬럼을 추가하는 부분
         if serializer.is_valid():
             serializer.save()
-    
+
+        
         if len(apply_counter) == roomHeadcount:
             room = Room.objects.get(id = pk)
             room.room_status = 2

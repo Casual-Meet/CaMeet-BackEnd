@@ -50,7 +50,7 @@ class User(AbstractUser):
     #user_email=models.CharField(max_length=50, default="" ,blank=None, null=True)
     user_status=models.CharField(max_length=50, default="0" ,blank=True)
     #user_register_dttm= models.DateField(auto_now_add=True)
-    user_profile_img=models.ImageField(upload_to='%Y%m%d/' ,null=True,default='')
+    user_profile_img=models.ImageField(upload_to='%Y%m%d/' ,blank=True,default='')
     user_auth_email=models.CharField(max_length=50, default="" ,blank=True)
     
     
