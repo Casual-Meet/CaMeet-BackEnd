@@ -82,25 +82,26 @@ class RoomDetailAPIView(APIView):
         room=Room.objects.get(id=pk)
         apply_counter = Apply.objects.filter(room_id_id = pk)
         
-        try:
-            #방생성자가 신청을 한다면? 호스트는 참가하기를 누를 수 없습니다.
-            if room.user_key==host.email:
-                return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-            
-            #이미 신청을 한 유저라면? 이미 신청을 한 유저입니다.
-            obj=Apply.objects.filter(room_id_id=pk)&Apply.objects.filter(user_id_id=id)
-            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-        except Apply.DoesNotExist:
-            serializer = RoomApplySerializer(data = request.data)
-            roomHeadcount = Room.objects.get(id = pk).room_headcount
-            if serializer.is_valid():
-                serializer.save()
         
-            if len(apply_counter) == roomHeadcount:
-                room = Room.objects.get(id = pk)
-                room.room_status = 2
-                room.save()
-            return Response(serializer.data)
+        #방생성자가 신청을 한다면? 호스트는 참가하기를 누를 수 없습니다.
+        if room.user_key==host.email:
+            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+            
+         #이미 신청을 한 유저라면? 이미 신청을 한 유저입니다.
+        obj=Apply.objects.filter(room_id_id=pk)&Apply.objects.filter(user_id_id=id)
+        if len(obj)==1:
+            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        
+        serializer = RoomApplySerializer(data = request.data)
+        roomHeadcount = Room.objects.get(id = pk).room_headcount
+        if serializer.is_valid():
+            serializer.save()
+    
+        if len(apply_counter) == roomHeadcount:
+            room = Room.objects.get(id = pk)
+            room.room_status = 2
+            room.save()
+        return Response(serializer.data)
 
 class RoomCreateAPIView(APIView):
     
