@@ -77,21 +77,30 @@ class RoomDetailAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request, pk):
-        request.data['user_id'] = request.user.id
-        request.data['room_id'] = pk
+        id = request.user.id
+        host=User.objects.get(id=id)
+        room=Room.objects.get(id=pk)
         apply_counter = Apply.objects.filter(room_id_id = pk)
-        serializer = RoomApplySerializer(data = request.data)
-        roomHeadcount = Room.objects.get(id = pk).room_headcount
-        if serializer.is_valid():
-            serializer.save()
         
-        if len(apply_counter) == roomHeadcount:
-            room = Room.objects.get(id = pk)
-            room.room_status = 2
-            room.save()
-        return Response(serializer.data)
-
-
+        try:
+            #방생성자가 신청을 한다면? 호스트는 참가하기를 누를 수 없습니다.
+            if room.user_key==host.email:
+                return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+            
+            #이미 신청을 한 유저라면? 이미 신청을 한 유저입니다.
+            obj=Apply.objects.filter(room_id_id=pk)&Apply.objects.filter(user_id_id=id)
+            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        except Apply.DoesNotExist:
+            serializer = RoomApplySerializer(data = request.data)
+            roomHeadcount = Room.objects.get(id = pk).room_headcount
+            if serializer.is_valid():
+                serializer.save()
+        
+            if len(apply_counter) == roomHeadcount:
+                room = Room.objects.get(id = pk)
+                room.room_status = 2
+                room.save()
+            return Response(serializer.data)
 
 class RoomCreateAPIView(APIView):
     
