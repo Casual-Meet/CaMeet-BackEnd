@@ -63,6 +63,11 @@ class UserSerializer(serializers.ModelSerializer):
 
         return apply_list
 
+class RoomApplySerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Apply
+        fields = '__all__'
 
 
 # 룸정보 안에 유저정보까지
@@ -70,6 +75,9 @@ class RoomSerializer(serializers.ModelSerializer):
 
     host = serializers.SerializerMethodField()
 
+    guest = serializers.SerializerMethodField()
+
+    # aplly_info = RoomApplySerializer()
     # user_id = serializers.StringRelatedField()
     
     # 중요) 변수명을 모델에서 쓴 변수명으로 통일해줘야 함.(FK필드)
@@ -82,27 +90,45 @@ class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         # fields = [ 'room_title', 'user']
-        fields = ('id', 'room_title', 'room_interest', 'room_place','room_date','room_time','room_headcount','room_status','room_created_time','host','room_latitude','room_longitude')
+        fields = ('id', 'room_title', 'room_interest', 'room_place','room_date','room_time','room_headcount','room_status','room_created_time','host','guest', 'room_latitude','room_longitude')
         # fields = ['id', 'user_key', 'room_title', 'room_interest']
         # unique_together = ['user_id', 'room_title']
-    
+
     def get_host(self, obj):
 
+        
         # 호스트는 객체가 하나라 for문이 아니라 그냥 json 형태로 담아주기만 하면 됨.
         user_json = {
                 #'user_id': obj.user_key.name,
                 'email' : obj.user_key.email,
                 'user_nickname' : obj.user_key.user_nickname,
-                #'user_age' : obj.user_key.created,
+                'user_mbti' : obj.user_key.user_mbti,
+                'user_keyword1' : obj.user_key.user_keyword1,
+                'user_keyword2' : obj.user_key.user_keyword2,
+                'user_keyword3' : obj.user_key.user_keyword3,
+                # 'user_profile_img' : obj.user_key.user_profile_img,
             }
         return user_json
 
-# 이건 안씀.
-class ApplySerializer(serializers.ModelSerializer):
+    def get_guest(self, obj):
+        apply = obj.participant.all()
 
-    class Meta:
-        model = Apply
-        fields = '__all__'
+        appliers_all_json = []
+
+        for applier in apply:
+
+            applier_json = {
+                    'apply_id' : applier.id ,
+                    'user_nickname' : applier.user_id.user_nickname,
+                    'user_mbti' : applier.user_id.user_mbti,
+                    'user_keyword1' : applier.user_id.user_keyword1,
+                    'user_keyword2' : applier.user_id.user_keyword2,
+                    'user_keyword3' : applier.user_id.user_keyword3,
+                    # 'user_profile_img' : applier.user_id.user_profile_img,
+                }
+            appliers_all_json.append(applier_json)
+
+        return appliers_all_json
 
 class RoomcreateSerializer(serializers.ModelSerializer):
 
@@ -110,8 +136,3 @@ class RoomcreateSerializer(serializers.ModelSerializer):
         model = Room
         fields = '__all__'
 
-class RoomApplySerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Apply
-        fields = '__all__'
