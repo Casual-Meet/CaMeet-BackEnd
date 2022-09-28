@@ -115,8 +115,10 @@ class RoomCreateAPIView(APIView):
     
     def post(self, request):
         id=request.user.id
-        request.data['user_id']=id
+        request.data['user_key']=id
         serializer = RoomcreateSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
+        else:
+            return Response(status=status.HTTP_501_NOT_IMPLEMENTED)
         return Response(serializer.data)
