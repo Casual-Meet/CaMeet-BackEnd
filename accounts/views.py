@@ -166,17 +166,13 @@ def google_callback(request):
     client_id = getattr(settings, "SOCIAL_AUTH_GOOGLE_CLIENT_ID")
     client_secret = getattr(settings, "SOCIAL_AUTH_GOOGLE_SECRET")
     code = request.GET.get('code')
-    """
-    Access Token Request
-    """
+    #access_token을 요청해보자.
     token_req = requests.post(
         f"https://oauth2.googleapis.com/token?client_id={client_id}&client_secret={client_secret}&code={code}&grant_type=authorization_code&redirect_uri=http://localhost:3000/login&state={state}")
     token_req_json = token_req.json()
     
     access_token = token_req_json.get('access_token')
-    """
-    Email Request
-    """
+    #email정보를 요청하자.
     email_req = requests.get(
         f"https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={access_token}")
     email_req_status = email_req.status_code
